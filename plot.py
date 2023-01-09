@@ -20,10 +20,12 @@ def plot_df(
         plot_median=False,
         bbox_to_anchor=BBOX_TO_ANCHOR,
 ):
-    df.plot()
+    fig, ax = plt.subplots(1)
 
     if plot_median:
-        df.median(axis=1).plot(color='k', label='median', linewidth=4)
+        df.median(axis=1).plot(color='k', label='median', linewidth=4, ax=ax)
+
+    df.plot(ax=ax)
 
     plt.legend(fontsize=12, bbox_to_anchor=bbox_to_anchor)
     plt.xticks(fontsize=12)
