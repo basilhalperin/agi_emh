@@ -24,6 +24,7 @@ RGDP_FRED_KEYS = {
     # DOUBLE CHECK BELOW HERE -- e.g. units are correct
     'NGDPRSAXDCCAQ': 'Canada',
     'NGDPRSAXDCAUQ': 'Australia',
+    #'NYGDPPCAPKDWLD': 'World per capita',
     #'CLVMNACSCAB1GQFR': 'France',
     #'CLVMNACSCAB1GQDE': 'Germany',
     #'JPNRGDPEXP': 'Japan',
