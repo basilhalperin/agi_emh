@@ -51,22 +51,23 @@ def bfill(x):
     return x.bfill()
 
 
-def get_us_srs(df, k, freq=None, resample=last, end=None, horizons=[5, 10, 15, 20]):
+def get_us_srs(df, k, freq=None, resample=last, end=None, horizons=HORIZONS):
     horizon_to_horizon_str = {horizon: ('0' + str(horizon))[-2:] for horizon in horizons}
     horizon_to_k = {horizon: k+horizon_to_horizon_str[horizon] for horizon in horizons}
     result = {}
     for horizon in horizon_to_k:
         name = horizon_to_k[horizon]
-        tmp = df[name]
-        if freq:
-            tmp = resample(tmp.resample(freq))
-        if end:
-            tmp = tmp.loc[:end]
-        result[horizon] = tmp
+        tmp = df.get(name)
+        if tmp is not None:
+            if freq:
+                tmp = resample(tmp.resample(freq))
+            if end:
+                tmp = tmp.loc[:end]
+            result[horizon] = tmp
     return pd.DataFrame(result)
 
 
-def load_us_tips_fed(url=US_TIPS_URL, freq='A', resample=last, end=END):
+def load_us_tips_fed(url=US_TIPS_URL, freq='A', resample=last, end=END, horizons=HORIZONS):
     """
     Documentation: https://www.federalreserve.gov/data/tips-yield-curve-and-inflation-compensation.htm
     """
@@ -76,8 +77,8 @@ def load_us_tips_fed(url=US_TIPS_URL, freq='A', resample=last, end=END):
     us_daily.index = pd.to_datetime(us_daily.index)
     us_daily.index.name = None
 
-    us_be = get_us_srs(us_daily, 'BKEVEN', freq=freq, resample=resample, end=end)
-    us_r = get_us_srs(us_daily, 'TIPSY', freq=freq, resample=resample, end=end)
+    us_be = get_us_srs(us_daily, 'BKEVEN', freq=freq, resample=resample, end=end, horizons=horizons)
+    us_r = get_us_srs(us_daily, 'TIPSY', freq=freq, resample=resample, end=end, horizons=horizons)
 
     return us_be, us_r, us_daily
 
