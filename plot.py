@@ -186,7 +186,7 @@ def scatter_r_vs_gdp(
         ax.set_ylim(ylim)
 
         if fortyfive:
-            ax.plot(plt.xlim(), plt.xlim(), linestyle='-', color='k', alpha=0.1,
+            ax.plot(xlim, xlim, linestyle='-', color='k', alpha=0.1,
                     scalex=False, scaley=False, label='45-degree')
 
         if regplot and len(stacked) > 1:
@@ -240,6 +240,8 @@ def plot_r_vs_gdp(
         r_by_horizon, rgdp_ahead, horizon, start='1970',
         bta=BTA_BY_NUMCOL[2], figsize=None,
         num_col=2,
+        var_str='r', outcome_base_str='GDP {0}y ahead',
+        title_base_str='{0}y real rate vs. GDP growth {0}y ahead',
         save=False, save_name='r_figs/ts_r_vs_gdp_{0}.png'
 ):
     num_countries = len(r_by_horizon.columns)
@@ -256,8 +258,8 @@ def plot_r_vs_gdp(
     for country in r_by_horizon:
         ax = plt.subplot(gs[i, j])
         df = pd.DataFrame({
-            'r': r_by_horizon[country],
-            'GDP {0}y ahead'.format(horizon): rgdp_ahead[country]
+            var_str: r_by_horizon[country],
+            outcome_base_str.format(horizon): rgdp_ahead[country]
         })
         df.index.name = None
         df = df.loc[start:]
@@ -270,7 +272,7 @@ def plot_r_vs_gdp(
         if j%num_columns == 0:
             j = 0
             i += 1
-    fig.suptitle('{0}y real rate vs. GDP growth {0}y ahead'.format(horizon), size=16)
+    fig.suptitle(title_base_str.format(horizon), size=16)
     fig.tight_layout()
     legend_ax = plt.subplot(gs[num_rows-1, 0])
     legend_ax.legend(fontsize=12, ncol=2, bbox_to_anchor=bta)
